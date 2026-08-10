@@ -91,6 +91,7 @@ public:
         CypherParser::OC_ReadingClauseContext& ctx);
     std::unique_ptr<ReadingClause> transformMatch(CypherParser::OC_MatchContext& ctx);
     std::unique_ptr<ReadingClause> transformUnwind(CypherParser::OC_UnwindContext& ctx);
+    std::unique_ptr<ReadingClause> transformTumble(CypherParser::IC_TumbleContext& ctx);
     std::vector<YieldVariable> transformYieldVariables(CypherParser::OC_YieldItemsContext& ctx);
     std::unique_ptr<ReadingClause> transformInQueryCall(CypherParser::IC_InQueryCallContext& ctx);
     std::unique_ptr<ReadingClause> transformLoadFrom(CypherParser::IC_LoadFromContext& ctx);

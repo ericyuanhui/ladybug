@@ -19,6 +19,7 @@ add_library(lbug_planner_operator
         logical_flatten.cpp
         logical_hash_join.cpp
         logical_table_function_call.cpp
+        logical_tumble.cpp
         logical_intersect.cpp
         logical_limit.cpp
         logical_operator.cpp

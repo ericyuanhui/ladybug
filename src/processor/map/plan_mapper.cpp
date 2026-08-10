@@ -212,6 +212,9 @@ std::unique_ptr<PhysicalOperator> PlanMapper::mapOperator(const LogicalOperator*
     case LogicalOperatorType::TABLE_FUNCTION_CALL: {
         physicalOperator = mapTableFunctionCall(logicalOperator);
     } break;
+    case LogicalOperatorType::TUMBLE: {
+        physicalOperator = mapTumble(logicalOperator);
+    } break;
     case LogicalOperatorType::TRANSACTION: {
         physicalOperator = mapTransaction(logicalOperator);
     } break;

@@ -35,6 +35,7 @@ add_library(lbug_processor_operator
         standalone_call.cpp
         table_function_call.cpp
         transaction.cpp
+        tumble.cpp
         unwind.cpp
         unwind_dedup.cpp)
 

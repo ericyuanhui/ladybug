@@ -113,6 +113,7 @@ public:
     void planReadingClause(const binder::BoundReadingClause& readingClause, LogicalPlan& plan);
     void planMatchClause(const binder::BoundReadingClause& readingClause, LogicalPlan& plan);
     void planUnwindClause(const binder::BoundReadingClause& readingClause, LogicalPlan& plan);
+    void planTumbleClause(const binder::BoundReadingClause& readingClause, LogicalPlan& plan);
     void planTableFunctionCall(const binder::BoundReadingClause& readingClause, LogicalPlan& plan);
 
     void planReadOp(std::shared_ptr<LogicalOperator> op,
@@ -314,6 +315,7 @@ public:
     void appendDummyScan(LogicalPlan& plan);
 
     void appendUnwind(const binder::BoundReadingClause& boundReadingClause, LogicalPlan& plan);
+    void appendTumble(const binder::BoundReadingClause& boundReadingClause, LogicalPlan& plan);
 
     void appendFlattens(const f_group_pos_set& groupsPos, LogicalPlan& plan);
     void appendFlattenIfNecessary(f_group_pos groupPos, LogicalPlan& plan);

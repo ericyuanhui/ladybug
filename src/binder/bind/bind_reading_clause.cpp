@@ -15,6 +15,9 @@ std::unique_ptr<BoundReadingClause> Binder::bindReadingClause(const ReadingClaus
     case ClauseType::UNWIND: {
         return bindUnwindClause(readingClause);
     }
+    case ClauseType::TUMBLE: {
+        return bindTumbleClause(readingClause);
+    }
     case ClauseType::IN_QUERY_CALL: {
         return bindInQueryCall(readingClause);
     }

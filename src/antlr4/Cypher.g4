@@ -345,9 +345,14 @@ oC_UpdatingClause
 oC_ReadingClause
     : oC_Match
         | oC_Unwind
+        | iC_Tumble
         | iC_InQueryCall
         | iC_LoadFrom
         ;
+
+iC_Tumble
+    : TUMBLE SP ON SP oC_Expression SP EVERY SP oC_Expression SP YIELD SP oC_Variable SP? ',' SP? oC_Variable
+    ;
 
 iC_LoadFrom
     :  LOAD ( SP WITH SP HEADERS SP? '(' SP? iC_ColumnDefinitions SP? ')' )? SP FROM SP iC_ScanSource (SP? '(' SP? iC_Options SP? ')')? (SP? oC_Where)? ;
@@ -837,6 +842,8 @@ iC_NonReservedKeywords
         | USER
         | PASSWORD
         | MAP
+        | EVERY
+        | TUMBLE
         ;
 
 UnescapedSymbolicName

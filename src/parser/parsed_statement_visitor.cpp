@@ -133,6 +133,9 @@ void StatementVisitor::visitReadingClause(const ReadingClause* readingClause) {
     case ClauseType::UNWIND: {
         visitUnwind(readingClause);
     } break;
+    case ClauseType::TUMBLE: {
+        visitTumble(readingClause);
+    } break;
     case ClauseType::IN_QUERY_CALL: {
         visitInQueryCall(readingClause);
     } break;

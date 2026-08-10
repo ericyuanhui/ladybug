@@ -182,6 +182,9 @@ void BoundStatementVisitor::visitReadingClause(const BoundReadingClause& reading
     case ClauseType::UNWIND: {
         visitUnwind(readingClause);
     } break;
+    case ClauseType::TUMBLE: {
+        visitTumble(readingClause);
+    } break;
     case ClauseType::TABLE_FUNCTION_CALL: {
         visitTableFunctionCall(readingClause);
     } break;
@@ -200,6 +203,9 @@ void BoundStatementVisitor::visitReadingClauseUnsafe(BoundReadingClause& reading
     } break;
     case ClauseType::UNWIND: {
         visitUnwind(readingClause);
+    } break;
+    case ClauseType::TUMBLE: {
+        visitTumble(readingClause);
     } break;
     case ClauseType::TABLE_FUNCTION_CALL: {
         visitTableFunctionCall(readingClause);

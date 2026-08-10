@@ -13,6 +13,7 @@ add_library(lbug_planner_plan_operator
         append_filter.cpp
         append_flatten.cpp
         append_table_function_call.cpp
+        append_tumble.cpp
         append_join.cpp
         append_limit.cpp
         append_multiplicity_reducer.cpp

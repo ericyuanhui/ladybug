@@ -5,6 +5,7 @@
 #include "binder/query/reading_clause/bound_load_from.h"
 #include "binder/query/reading_clause/bound_match_clause.h"
 #include "binder/query/reading_clause/bound_table_function_call.h"
+#include "binder/query/reading_clause/bound_tumble_clause.h"
 #include "binder/query/reading_clause/bound_unwind_clause.h"
 #include "binder/query/updating_clause/bound_delete_clause.h"
 #include "binder/query/updating_clause/bound_insert_clause.h"
@@ -59,6 +60,11 @@ void PropertyCollector::visitMatch(const BoundReadingClause& readingClause) {
 void PropertyCollector::visitUnwind(const BoundReadingClause& readingClause) {
     auto& unwindClause = readingClause.constCast<BoundUnwindClause>();
     collectProperties(unwindClause.getInExpr());
+}
+
+void PropertyCollector::visitTumble(const BoundReadingClause& readingClause) {
+    auto& tumbleClause = readingClause.constCast<BoundTumbleClause>();
+    collectProperties(tumbleClause.getTimeExpression());
 }
 
 void PropertyCollector::visitLoadFrom(const BoundReadingClause& readingClause) {

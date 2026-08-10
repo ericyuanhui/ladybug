@@ -112,6 +112,8 @@ std::string LogicalOperatorUtils::logicalOperatorTypeToString(LogicalOperatorTyp
         return "STANDALONE_CALL";
     case LogicalOperatorType::TABLE_FUNCTION_CALL:
         return "TABLE_FUNCTION_CALL";
+    case LogicalOperatorType::TUMBLE:
+        return "TUMBLE";
     case LogicalOperatorType::TRANSACTION:
         return "TRANSACTION";
     case LogicalOperatorType::UNION_ALL:

@@ -47,6 +47,7 @@ add_library(lbug_processor_mapper
         map_set.cpp
         map_simple.cpp
         map_transaction.cpp
+        map_tumble.cpp
         map_union.cpp
         map_unwind.cpp
         map_unwind_dedup.cpp

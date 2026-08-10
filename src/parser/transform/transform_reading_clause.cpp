@@ -2,6 +2,7 @@
 #include "parser/query/reading_clause/in_query_call_clause.h"
 #include "parser/query/reading_clause/load_from.h"
 #include "parser/query/reading_clause/match_clause.h"
+#include "parser/query/reading_clause/tumble_clause.h"
 #include "parser/query/reading_clause/unwind_clause.h"
 #include "parser/transformer.h"
 
@@ -16,6 +17,8 @@ std::unique_ptr<ReadingClause> Transformer::transformReadingClause(
         return transformMatch(*ctx.oC_Match());
     } else if (ctx.oC_Unwind()) {
         return transformUnwind(*ctx.oC_Unwind());
+    } else if (ctx.iC_Tumble()) {
+        return transformTumble(*ctx.iC_Tumble());
     } else if (ctx.iC_InQueryCall()) {
         return transformInQueryCall(*ctx.iC_InQueryCall());
     } else if (ctx.iC_LoadFrom()) {
@@ -65,6 +68,12 @@ std::unique_ptr<ReadingClause> Transformer::transformUnwind(CypherParser::OC_Unw
     auto expression = transformExpression(*ctx.oC_Expression());
     auto transformedVariable = transformVariable(*ctx.oC_Variable());
     return std::make_unique<UnwindClause>(std::move(expression), std::move(transformedVariable));
+}
+
+std::unique_ptr<ReadingClause> Transformer::transformTumble(CypherParser::IC_TumbleContext& ctx) {
+    return std::make_unique<TumbleClause>(transformExpression(*ctx.oC_Expression(0)),
+        transformExpression(*ctx.oC_Expression(1)), transformVariable(*ctx.oC_Variable(0)),
+        transformVariable(*ctx.oC_Variable(1)));
 }
 
 std::vector<YieldVariable> Transformer::transformYieldVariables(

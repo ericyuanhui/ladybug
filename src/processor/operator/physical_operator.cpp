@@ -125,6 +125,8 @@ std::string PhysicalOperatorUtils::operatorTypeToString(PhysicalOperatorType ope
         return "STANDALONE_CALL";
     case PhysicalOperatorType::TABLE_FUNCTION_CALL:
         return "TABLE_FUNCTION_CALL";
+    case PhysicalOperatorType::TUMBLE:
+        return "TUMBLE";
     case PhysicalOperatorType::TOP_K:
         return "TOP_K";
     case PhysicalOperatorType::TOP_K_SCAN:

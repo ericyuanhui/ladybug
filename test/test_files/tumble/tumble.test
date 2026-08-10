@@ -1,0 +1,91 @@
+-DATASET CSV empty
+
+--
+
+-CASE Tumble
+
+-STATEMENT CREATE NODE TABLE EventNetworkOnline(id INT64, login_time TIMESTAMP, user_ipv4 STRING, PRIMARY KEY(id));
+---- ok
+
+-STATEMENT CREATE (:EventNetworkOnline {id: 101, login_time: timestamp('2026-08-01 00:00:00'), user_ipv4: '10.0.0.1'}),
+                  (:EventNetworkOnline {id: 102, login_time: timestamp('2026-08-01 10:23:45'), user_ipv4: '10.0.0.2'}),
+                  (:EventNetworkOnline {id: 103, login_time: timestamp('2026-08-01 23:59:59'), user_ipv4: '10.0.0.3'}),
+                  (:EventNetworkOnline {id: 104, login_time: timestamp('2026-08-02 00:00:00'), user_ipv4: '10.0.0.4'}),
+                  (:EventNetworkOnline {id: 105, user_ipv4: '10.0.0.5'});
+---- ok
+
+-LOG DailyTumbleBoundariesAndNull
+-STATEMENT MATCH (e:EventNetworkOnline)
+           TUMBLE ON e.login_time EVERY interval('1 day')
+           YIELD window_start, window_end
+           RETURN e.id, window_start, window_end
+           ORDER BY e.id;
+---- 5
+101|2026-08-01 00:00:00|2026-08-02 00:00:00
+102|2026-08-01 00:00:00|2026-08-02 00:00:00
+103|2026-08-01 00:00:00|2026-08-02 00:00:00
+104|2026-08-02 00:00:00|2026-08-03 00:00:00
+105||
+
+-LOG YieldCommaWhitespaceIsOptional
+-STATEMENT UNWIND [timestamp('2026-08-01 00:00:00')] AS login_time
+           TUMBLE ON login_time EVERY interval('1 day')
+           YIELD window_start , window_end
+           RETURN window_start, window_end;
+---- 1
+2026-08-01 00:00:00|2026-08-02 00:00:00
+
+-LOG RelationshipTimestampPropertyIsRetainedThroughProjectionPushDown
+-STATEMENT CREATE REL TABLE EventNetworkOnlineRel(FROM EventNetworkOnline TO EventNetworkOnline, event_time TIMESTAMP, MANY_MANY);
+---- ok
+
+-STATEMENT MATCH (a:EventNetworkOnline {id: 101}), (b:EventNetworkOnline {id: 102})
+           CREATE (a)-[:EventNetworkOnlineRel {event_time: timestamp('2026-08-01 10:23:45')}]->(b);
+---- ok
+
+-STATEMENT MATCH (a:EventNetworkOnline)-[r:EventNetworkOnlineRel]->(b:EventNetworkOnline)
+           TUMBLE ON r.event_time EVERY interval('1 day')
+           YIELD window_start, window_end
+           RETURN a.id, b.id, window_start, window_end;
+---- 1
+101|102|2026-08-01 00:00:00|2026-08-02 00:00:00
+
+-LOG PreEpochUsesFloorDivision
+-STATEMENT UNWIND [timestamp('1969-12-31 23:59:59')] AS login_time
+           TUMBLE ON login_time EVERY interval('1 day')
+           YIELD window_start, window_end
+           RETURN window_start, window_end;
+---- 1
+1969-12-31 00:00:00|1970-01-01 00:00:00
+
+-LOG RejectCalendarInterval
+-STATEMENT UNWIND [timestamp('2026-08-01 00:00:00')] AS login_time
+           TUMBLE ON login_time EVERY interval('1 month')
+           YIELD window_start, window_end
+           RETURN window_start;
+---- error
+Binder exception: TUMBLE EVERY does not support calendar month or year intervals.
+
+-LOG RejectNonPositiveInterval
+-STATEMENT UNWIND [timestamp('2026-08-01 00:00:00')] AS login_time
+           TUMBLE ON login_time EVERY interval('0 second')
+           YIELD window_start, window_end
+           RETURN window_start;
+---- error
+Binder exception: TUMBLE EVERY interval must be a positive fixed duration.
+
+-LOG RejectAliasConflict
+-STATEMENT UNWIND [timestamp('2026-08-01 00:00:00')] AS login_time
+           TUMBLE ON login_time EVERY interval('1 day')
+           YIELD login_time, window_end
+           RETURN window_end;
+---- error
+Binder exception: TUMBLE YIELD names must be distinct and not already in scope.
+
+-LOG RejectNonTimestamp
+-STATEMENT UNWIND [1] AS value
+           TUMBLE ON value EVERY interval('1 day')
+           YIELD window_start, window_end
+           RETURN window_start;
+---- error
+Binder exception: TUMBLE ON expression must have a timestamp data type.

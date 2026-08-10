@@ -30,6 +30,7 @@ private:
     virtual void visitReadingClause(const ReadingClause* readingClause);
     virtual void visitMatch(const ReadingClause* /*readingClause*/) {}
     virtual void visitUnwind(const ReadingClause* /*readingClause*/) {}
+    virtual void visitTumble(const ReadingClause* /*readingClause*/) {}
     virtual void visitInQueryCall(const ReadingClause* /*readingClause*/) {}
     virtual void visitLoadFrom(const ReadingClause* /*readingClause*/) {}
     virtual void visitUpdatingClause(const UpdatingClause* /*updatingClause*/);

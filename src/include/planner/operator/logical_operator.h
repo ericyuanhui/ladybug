@@ -69,6 +69,7 @@ enum class LogicalOperatorType : uint8_t {
     SET_PROPERTY,
     STANDALONE_CALL,
     TABLE_FUNCTION_CALL,
+    TUMBLE,
     TRANSACTION,
     UNION_ALL,
     UNWIND,

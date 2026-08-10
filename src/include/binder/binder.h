@@ -225,6 +225,8 @@ public:
     void rewriteMatchPattern(BoundGraphPattern& boundGraphPattern);
     std::unique_ptr<BoundReadingClause> bindUnwindClause(
         const parser::ReadingClause& readingClause);
+    std::unique_ptr<BoundReadingClause> bindTumbleClause(
+        const parser::ReadingClause& readingClause);
     std::unique_ptr<BoundReadingClause> bindInQueryCall(const parser::ReadingClause& readingClause);
     std::unique_ptr<BoundReadingClause> bindLoadFrom(const parser::ReadingClause& readingClause);
 

@@ -2,6 +2,7 @@
 #include "binder/query/reading_clause/bound_load_from.h"
 #include "binder/query/reading_clause/bound_match_clause.h"
 #include "binder/query/reading_clause/bound_table_function_call.h"
+#include "binder/query/reading_clause/bound_tumble_clause.h"
 #include "planner/planner.h"
 
 using namespace lbug::binder;
@@ -17,6 +18,9 @@ void Planner::planReadingClause(const BoundReadingClause& readingClause, Logical
     } break;
     case ClauseType::UNWIND: {
         planUnwindClause(readingClause, plan);
+    } break;
+    case ClauseType::TUMBLE: {
+        planTumbleClause(readingClause, plan);
     } break;
     case ClauseType::TABLE_FUNCTION_CALL: {
         planTableFunctionCall(readingClause, plan);
@@ -57,6 +61,11 @@ void Planner::planUnwindClause(const BoundReadingClause& boundReadingClause, Log
         appendDummyScan(plan);
     }
     appendUnwind(boundReadingClause, plan);
+}
+
+void Planner::planTumbleClause(const BoundReadingClause& boundReadingClause, LogicalPlan& plan) {
+    DASSERT(!plan.isEmpty());
+    appendTumble(boundReadingClause, plan);
 }
 
 class PredicatesDependencyAnalyzer {

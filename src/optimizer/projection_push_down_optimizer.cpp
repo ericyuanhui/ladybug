@@ -17,6 +17,7 @@
 #include "planner/operator/logical_path_property_probe.h"
 #include "planner/operator/logical_projection.h"
 #include "planner/operator/logical_table_function_call.h"
+#include "planner/operator/logical_tumble.h"
 #include "planner/operator/logical_unwind.h"
 #include "planner/operator/persistent/logical_copy_from.h"
 #include "planner/operator/persistent/logical_delete.h"
@@ -185,6 +186,11 @@ void ProjectionPushDownOptimizer::visitOrderBy(LogicalOperator* op) {
 void ProjectionPushDownOptimizer::visitUnwind(LogicalOperator* op) {
     auto& unwind = op->constCast<LogicalUnwind>();
     collectExpressionsInUse(unwind.getInExpr());
+}
+
+void ProjectionPushDownOptimizer::visitTumble(LogicalOperator* op) {
+    auto& tumble = op->constCast<LogicalTumble>();
+    collectExpressionsInUse(tumble.getTimeExpression());
 }
 
 void ProjectionPushDownOptimizer::visitInsert(LogicalOperator* op) {

@@ -3,6 +3,7 @@ add_library(lbug_binder_bind_read
         bind_in_query_call.cpp
         bind_load_from.cpp
         bind_match.cpp
+        bind_tumble.cpp
         bind_unwind.cpp)
 
 set(ALL_OBJECT_FILES

@@ -90,6 +90,8 @@ ELSE : ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' ) ;
 
 END : ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) ;
 
+EVERY : ( 'E' | 'e' ) ( 'V' | 'v' ) ( 'E' | 'e' ) ( 'R' | 'r' ) ( 'Y' | 'y' ) ;
+
 ENDS : ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) ( 'S' | 's' ) ;
 
 EXISTS : ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'I' | 'i' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'S' | 's' ) ;
@@ -217,6 +219,8 @@ TO : ( 'T' | 't' ) ( 'O' | 'o' ) ;
 TRAIL : ( 'T' | 't' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ;
 
 TRANSACTION : ( 'T' | 't' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'A' | 'a' ) ( 'C' | 'c' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ;
+
+TUMBLE : ( 'T' | 't' ) ( 'U' | 'u' ) ( 'M' | 'm' ) ( 'B' | 'b' ) ( 'L' | 'l' ) ( 'E' | 'e' ) ;
 
 TRUE : ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'E' | 'e' ) ;
 
@@ -604,9 +608,14 @@ oC_UpdatingClause
 oC_ReadingClause
     : oC_Match
         | oC_Unwind
+        | iC_Tumble
         | iC_InQueryCall
         | iC_LoadFrom
         ;
+
+iC_Tumble
+    : TUMBLE SP ON SP oC_Expression SP EVERY SP oC_Expression SP YIELD SP oC_Variable SP? ',' SP? oC_Variable
+    ;
 
 iC_LoadFrom
     :  LOAD ( SP WITH SP HEADERS SP? '(' SP? iC_ColumnDefinitions SP? ')' )? SP FROM SP iC_ScanSource (SP? '(' SP? iC_Options SP? ')')? (SP? oC_Where)? ;
@@ -1096,6 +1105,8 @@ iC_NonReservedKeywords
         | USER
         | PASSWORD
         | MAP
+        | EVERY
+        | TUMBLE
         ;
 
 UnescapedSymbolicName
